@@ -20,9 +20,9 @@ def test_build_indicators_uses_matching_periods_and_calculates_growth():
     }}}
     rows = build_indicators(payload)
     assert len(rows) == 2
-    assert rows[1]["Crescimento da receita (%)"] == 20
-    assert rows[1]["Margem operacional (%)"] == 25
-    assert rows[1]["Fluxo de caixa livre (USD)"] == 28
+    assert abs(rows[1]["Crescimento da receita (%)"] - 20) < 1e-9
+    assert abs(rows[1]["Margem operacional (%)"] - 25) < 1e-9
+    assert abs(rows[1]["Fluxo de caixa livre (USD)"] - 28) < 1e-9
     assert rows[1]["ROE aproximado (%)"] == 16.363636363636363
 
 
