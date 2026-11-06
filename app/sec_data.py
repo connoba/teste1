@@ -105,10 +105,13 @@ def latest_submissions(db_path: str | Path) -> dict[str, Any] | None:
     path = Path(db_path)
     if not path.exists():
         return None
-    with sqlite3.connect(path) as connection:
-        row = connection.execute(
-            "SELECT payload_json FROM sec_submissions ORDER BY id DESC LIMIT 1"
-        ).fetchone()
+    try:
+        with sqlite3.connect(path) as connection:
+            row = connection.execute(
+                "SELECT payload_json FROM sec_submissions ORDER BY id DESC LIMIT 1"
+            ).fetchone()
+    except sqlite3.OperationalError:
+        return None
     return json.loads(row[0]) if row else None
 
 
