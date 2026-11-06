@@ -9,6 +9,7 @@ import streamlit as st
 
 from app.financials import METRICS, annual_observations
 from app.indicators import build_indicators
+from app.reporting import build_markdown_report
 from app.sec_data import APPLE_CIK, COMPANY_FACTS_URL, fetch_sec_json, latest_company_facts, save_company_facts
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -121,6 +122,12 @@ else:
         else:
             st.info("Atualize os dados oficiais para carregar também o calendário de filings SEC.")
         st.caption("Este calendário contém datas efetivas de submissão à SEC. Não representa previsões de resultados nem datas futuras de earnings.")
+
+    with tab_report:
+        st.subheader("Relatório financeiro")
+        report_text = build_markdown_report(payload, latest_submissions(DB_PATH))
+        st.markdown(report_text)
+        st.download_button("Descarregar relatório Markdown", report_text.encode("utf-8"), "apple_financial_report.md", "text/markdown")
 
     with tab_dictionary:
         st.subheader("Tags contabilísticas disponíveis")
