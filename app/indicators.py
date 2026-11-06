@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import Any
+from datetime import date
 
 from app.financials import annual_observations
 
@@ -31,11 +32,19 @@ def build_indicators(payload: dict[str, Any]) -> list[dict[str, Any]]:
         assets = values.get("Ativos")
         liabilities = values.get("Passivos")
 
+        adjacent_previous = False
+        if previous is not None and previous.get("__periodo"):
+            try:
+                day_gap = (date.fromisoformat(period) - date.fromisoformat(previous["__periodo"])).days
+                adjacent_previous = 330 <= day_gap <= 380
+            except ValueError:
+                adjacent_previous = False
+
         row: dict[str, Any] = {"Período": period}
         if revenue not in (None, 0):
             row["Margem operacional (%)"] = operating_income / revenue * 100 if operating_income is not None else None
             row["Margem líquida (%)"] = net_income / revenue * 100 if net_income is not None else None
-            if previous and previous.get("Receita") not in (None, 0):
+            if adjacent_previous and previous and previous.get("Receita") not in (None, 0):
                 row["Crescimento da receita (%)"] = (revenue / previous["Receita"] - 1) * 100
         if cfo is not None and capex is not None:
             row["Fluxo de caixa livre (USD)"] = cfo - abs(capex)
@@ -43,10 +52,11 @@ def build_indicators(payload: dict[str, Any]) -> list[dict[str, Any]]:
             row["Passivos / capital próprio (x)"] = liabilities / equity
         if assets is not None and liabilities is not None:
             row["Ativos - passivos (USD)"] = assets - liabilities
-        if net_income is not None and equity is not None and previous and previous.get("Capital próprio") is not None:
+        if net_income is not None and equity is not None and adjacent_previous and previous and previous.get("Capital próprio") is not None:
             average_equity = (equity + previous["Capital próprio"]) / 2
             if average_equity:
                 row["ROE aproximado (%)"] = net_income / average_equity * 100
         output.append(row)
-        previous = values
+        previous = dict(values)
+        previous["__periodo"] = period
     return output
