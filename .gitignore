@@ -1,0 +1,29 @@
+# Dados e documentos locais — não versionar
+/data/
+/local_data/
+/storage/
+/backups/
+*.sqlite
+*.sqlite3
+*.db
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Segredos
+.env
+.env.*
+!.env.example
+secrets.toml
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
