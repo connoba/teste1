@@ -11,13 +11,13 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 | 4 | Interface | Navegação, modo Lista, modo Gráficos e exportação | Protótipo |
 | 5 | Análise fundamentalista | Métricas, rácios, fórmulas e períodos consistentes | Protótipo |
 | 6 | Relatórios | Relatórios reproduzíveis e exportáveis, com fontes | Por iniciar |
-| 7 | Calendário | Eventos financeiros com origem e datas verificáveis | Por iniciar |
+| 7 | Calendário | Eventos financeiros com origem e datas verificáveis | Protótipo |
 | 8 | Qualidade e recuperação | Testes funcionais, offline, atualização, backup e restauro aprovados | Em preparação |
 | 9 | Entrega TESTE 1 | Instalação limpa e utilização diária validadas | Por iniciar |
 
 ## Trabalho implementado no protótipo
 - Interface local em Streamlit.
-- Recolha do SEC Company Facts para Apple Inc. (CIK 0000320193).
+- Recolha do SEC Company Facts e Submissions para Apple Inc. (CIK 0000320193).
 - Preservação do payload original em SQLite, com URL e data de recolha.
 - Extração inicial de observações 10-K anuais para um conjunto limitado de tags US-GAAP.
 - Separação entre factos de duração (fluxos) e factos instantâneos (balanço).
@@ -25,6 +25,7 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 - Tabela histórica, gráfico de série temporal e exportação CSV.
 - Scripts Windows para instalação e arranque.
 - Testes unitários para persistência, filtragem anual, unidades e indicadores derivados.\n- Indicadores iniciais: crescimento da receita, margens, fluxo de caixa livre aproximado, passivos/capital próprio e ROE aproximado.\n- Descarregamento manual de backup da base SQLite.
+- Histórico de submissões 10-K, 10-Q e 8-K com URL oficial da SEC.
 
 ## Próximos passos técnicos
 1. Confirmar o workflow no GitHub Actions.
@@ -32,6 +33,7 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 3. Comparar cada série anual com os 10-K originais da Apple; documentar divergências.
 4. Adicionar submissions SEC, accession number e deteção de alterações/reapresentações.
 5. Completar restauro e modo offline.
+6. Integrar calendário futuro de resultados apenas a partir de fontes oficiais, sem misturar estimativas com datas confirmadas.
 6. Implementar rácios e diagnósticos apenas depois da validação das séries base.
 
 ## Regras
