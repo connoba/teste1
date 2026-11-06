@@ -1,10 +1,12 @@
 """Conversão conservadora de tags SEC XBRL em observações anuais."""
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
+# Tags específicas/padrão usadas no piloto Apple. A unidade é sempre validada.
 METRICS = {
-    "Receita": ("Revenues", "duration", "USD"),
+    "Receita": ("RevenueFromContractWithCustomerExcludingAssessedTax", "duration", "USD"),
     "Resultado operacional": ("OperatingIncomeLoss", "duration", "USD"),
     "Resultado líquido": ("NetIncomeLoss", "duration", "USD"),
     "Fluxo de caixa operacional": ("NetCashProvidedByUsedInOperatingActivities", "duration", "USD"),
@@ -14,6 +16,7 @@ METRICS = {
     "Capital próprio": ("StockholdersEquity", "instant", "USD"),
     "Caixa e equivalentes": ("CashAndCashEquivalentsAtCarryingValue", "instant", "USD"),
 }
+
 
 def annual_observations(payload: dict[str, Any], metric_name: str) -> list[dict[str, Any]]:
     """Extrai observações 10-K anuais; não agrega trimestres nem mistura unidades."""
@@ -34,7 +37,6 @@ def annual_observations(payload: dict[str, Any], metric_name: str) -> list[dict[
                 if not row.get("start"):
                     continue
                 try:
-                    from datetime import date
                     days = (date.fromisoformat(row["end"]) - date.fromisoformat(row["start"])).days
                 except (TypeError, ValueError):
                     continue
@@ -52,7 +54,8 @@ def annual_observations(payload: dict[str, Any], metric_name: str) -> list[dict[
                 "formulario": row.get("form"),
                 "tag": tag,
             })
-    # Uma observação por ano fiscal/período: privilegiar submissão mais recente.
+    # Se a SEC reportar mais do que uma versão para o mesmo período,
+    # manter a submissão mais recente, preservando a data e accession.
     chosen: dict[tuple[Any, str], dict[str, Any]] = {}
     for item in sorted(observations, key=lambda x: x.get("submetido") or ""):
         chosen[(item["ano_fiscal"], item["periodo"])] = item
