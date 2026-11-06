@@ -10,7 +10,7 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 | 3 | Dados oficiais | Importação SEC/Apple, proveniência, versões e validação contabilística | Protótipo |
 | 4 | Interface | Navegação, modo Lista, modo Gráficos e exportação | Protótipo |
 | 5 | Análise fundamentalista | Métricas, rácios, fórmulas e períodos consistentes | Protótipo |
-| 6 | Relatórios | Relatórios reproduzíveis e exportáveis, com fontes | Por iniciar |
+| 6 | Relatórios | Relatórios reproduzíveis e exportáveis, com fontes | Protótipo |
 | 7 | Calendário | Eventos financeiros com origem e datas verificáveis | Protótipo |
 | 8 | Qualidade e recuperação | Testes funcionais, offline, atualização, backup e restauro aprovados | Em preparação |
 | 9 | Entrega TESTE 1 | Instalação limpa e utilização diária validadas | Por iniciar |
@@ -26,12 +26,13 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 - Scripts Windows para instalação e arranque.
 - Testes unitários para persistência, filtragem anual, unidades e indicadores derivados.\n- Indicadores iniciais: crescimento da receita, margens, fluxo de caixa livre aproximado, passivos/capital próprio e ROE aproximado.\n- Descarregamento manual de backup da base SQLite.
 - Histórico de submissões 10-K, 10-Q e 8-K com URL oficial da SEC.
+- Relatório financeiro Markdown descarregável com métricas, indicadores, filings e fontes.
 
 ## Próximos passos técnicos
 1. Confirmar o workflow no GitHub Actions.
 2. Testar instalação e arranque num Windows limpo.
 3. Comparar cada série anual com os 10-K originais da Apple; documentar divergências.
-4. Adicionar submissions SEC, accession number e deteção de alterações/reapresentações.
+4. Completar deteção de alterações/reapresentações nos filings SEC.
 5. Completar restauro e modo offline.
 6. Integrar calendário futuro de resultados apenas a partir de fontes oficiais, sem misturar estimativas com datas confirmadas.
 6. Implementar rácios e diagnósticos apenas depois da validação das séries base.
