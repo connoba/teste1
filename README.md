@@ -28,7 +28,7 @@ O primeiro protótipo apresenta uma interface Streamlit local, permite obter o f
 5. Carregar em «Atualizar dados oficiais».
 
 ## Estado
-Consultar [PROJECT_STATUS.md](PROJECT_STATUS.md) e [ROADMAP.md](ROADMAP.md). Nove testes unitários passaram num ambiente local isolado. O workflow GitHub Actions, a instalação num PC Windows e a reconciliação com os 10-K continuam pendentes.
+Consultar [PROJECT_STATUS.md](PROJECT_STATUS.md) e [ROADMAP.md](ROADMAP.md). Doze testes unitários passaram num ambiente local isolado. O workflow GitHub Actions, a instalação num PC Windows e a reconciliação com os 10-K continuam pendentes.
 
 ## Segurança e privacidade
 A aplicação liga-se apenas a `127.0.0.1`. Os dados e a base SQLite ficam no computador. Não versionar a pasta `data/` nem credenciais.
