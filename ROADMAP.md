@@ -9,7 +9,7 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 | 2 | Fundação local | Arranque, configuração, SQLite, logs e backup/restauro testados | Em curso |
 | 3 | Dados oficiais | Importação SEC/Apple, proveniência, versões e validação contabilística | Protótipo |
 | 4 | Interface | Navegação, modo Lista, modo Gráficos e exportação | Protótipo |
-| 5 | Análise fundamentalista | Métricas, rácios, fórmulas e períodos consistentes | Por iniciar |
+| 5 | Análise fundamentalista | Métricas, rácios, fórmulas e períodos consistentes | Protótipo |
 | 6 | Relatórios | Relatórios reproduzíveis e exportáveis, com fontes | Por iniciar |
 | 7 | Calendário | Eventos financeiros com origem e datas verificáveis | Por iniciar |
 | 8 | Qualidade e recuperação | Testes funcionais, offline, atualização, backup e restauro aprovados | Em preparação |
@@ -24,14 +24,14 @@ As fases são sequenciais. Uma fase só passa a **Concluída** quando os critér
 - Filtros de unidade e duração anual; exclusão de formulários trimestrais.
 - Tabela histórica, gráfico de série temporal e exportação CSV.
 - Scripts Windows para instalação e arranque.
-- Testes unitários para persistência, filtragem anual e unidades.
+- Testes unitários para persistência, filtragem anual, unidades e indicadores derivados.\n- Indicadores iniciais: crescimento da receita, margens, fluxo de caixa livre aproximado, passivos/capital próprio e ROE aproximado.\n- Descarregamento manual de backup da base SQLite.
 
 ## Próximos passos técnicos
 1. Confirmar o workflow no GitHub Actions.
 2. Testar instalação e arranque num Windows limpo.
 3. Comparar cada série anual com os 10-K originais da Apple; documentar divergências.
 4. Adicionar submissions SEC, accession number e deteção de alterações/reapresentações.
-5. Completar backups/restauro e modo offline.
+5. Completar restauro e modo offline.
 6. Implementar rácios e diagnósticos apenas depois da validação das séries base.
 
 ## Regras
