@@ -122,7 +122,11 @@ def recent_filings(payload: dict[str, Any]) -> list[dict[str, Any]]:
     length = len(recent.get("form", []))
     results = []
     for index in range(length):
-        item = {column: recent.get(column, [None] * length)[index] for column in columns}
+        item = {
+            column: (recent.get(column) or [])[index]
+            if index < len(recent.get(column) or []) else None
+            for column in columns
+        }
         if item["form"] not in {"10-K", "10-Q", "8-K"}:
             continue
         accession = (item.get("accessionNumber") or "").replace("-", "")
