@@ -40,8 +40,8 @@
 |---|---|---|
 | 2026-11-06 | Acesso GitHub à conta connoba | Aprovado |
 | 2026-11-06 | Permissões no repositório teste1 | Leitura e escrita confirmadas |
-| 2026-11-06 | Testes unitários locais isolados | 9 aprovados |
-| 2026-11-06 | Workflow GitHub Actions | Configurado; resultado ainda não confirmado |
+| 2026-11-06 | Testes unitários locais isolados | 9 aprovados; compilação Python também passou |
+| 2026-11-06 | Workflow GitHub Actions | Configurado; GitHub não devolveu status para o commit consultado |
 | 2026-11-06 | Instalação Windows real | Pendente |
 | 2026-11-06 | Reconciliação com 10-K Apple | Pendente |
 
