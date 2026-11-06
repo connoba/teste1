@@ -30,6 +30,15 @@ with st.sidebar:
         help="Indique nome e email de contacto. Exemplo: Nome contacto@dominio.pt",
     )
     refresh = st.button("Atualizar dados oficiais", type="primary", use_container_width=True)
+    if DB_PATH.exists():
+        st.download_button(
+            "Descarregar backup da base de dados",
+            data=DB_PATH.read_bytes(),
+            file_name="teste1_backup.sqlite3",
+            mime="application/vnd.sqlite3",
+            use_container_width=True,
+        )
+
 
 if refresh:
     try:
