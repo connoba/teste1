@@ -10,7 +10,17 @@ import streamlit as st
 from app.financials import METRICS, annual_observations
 from app.indicators import build_indicators
 from app.reporting import build_markdown_report
-from app.sec_data import APPLE_CIK, COMPANY_FACTS_URL, fetch_sec_json, latest_company_facts, save_company_facts
+from app.sec_data import (
+    APPLE_CIK,
+    COMPANY_FACTS_URL,
+    SUBMISSIONS_URL,
+    fetch_sec_json,
+    latest_company_facts,
+    latest_submissions,
+    recent_filings,
+    save_company_facts,
+    save_submissions,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "data" / "teste1.sqlite3"
@@ -40,17 +50,26 @@ with st.sidebar:
             use_container_width=True,
         )
 
-
 if refresh:
-    try:
-        with st.spinner("A obter Company Facts diretamente da SEC..."):
-            payload_new = fetch_sec_json(COMPANY_FACTS_URL, user_agent)
-            collected_at = save_company_facts(payload_new, DB_PATH)
-        st.success(f"Payload original guardado localmente. Recolha: {collected_at}")
-    except Exception as exc:
-        st.error(f"Atualização falhou: {exc}")
+    if not user_agent.strip() or "@" not in user_agent:
+        st.error("Introduza um contacto válido (nome e email) para cumprir as regras de acesso da SEC.")
+    else:
+        try:
+            with st.spinner("A obter dados oficiais da SEC..."):
+                facts_payload = fetch_sec_json(COMPANY_FACTS_URL, user_agent.strip())
+                facts_collected = save_company_facts(facts_payload, DB_PATH)
+                submissions_payload = fetch_sec_json(SUBMISSIONS_URL, user_agent.strip())
+                submissions_collected = save_submissions(submissions_payload, DB_PATH)
+            st.success(
+                "Dados SEC guardados localmente. "
+                f"Company Facts: {facts_collected} · Submissions: {submissions_collected}"
+            )
+        except Exception as exc:
+            st.error(f"Atualização SEC falhou: {exc}")
 
 payload = latest_company_facts(DB_PATH)
+submissions = latest_submissions(DB_PATH)
+
 if payload is None:
     st.info("Ainda não há dados locais. Configure o contacto SEC na barra lateral e atualize os dados.")
     st.markdown(f"**Fonte oficial:** [SEC Company Facts — Apple]({COMPANY_FACTS_URL})")
@@ -61,20 +80,47 @@ else:
     c2.metric("Tags US-GAAP", f"{len(tags):,}")
     c3.metric("CIK", APPLE_CIK)
 
-    tab_table, tab_chart, tab_indicators, tab_dictionary = st.tabs(["Lista financeira", "Gráficos", "Indicadores", "Dicionário de dados"])
+    tab_table, tab_chart, tab_indicators, tab_filings, tab_report, tab_dictionary = st.tabs(
+        ["Lista financeira", "Gráficos", "Indicadores", "Filings SEC", "Relatório", "Dicionário de dados"]
+    )
 
     with tab_table:
         st.subheader("Histórico anual — demonstrações selecionadas")
-        selected = st.multiselect("Métricas", list(METRICS.keys()), default=["Receita", "Resultado operacional", "Resultado líquido", "Ativos", "Capital próprio"])
+        selected = st.multiselect(
+            "Métricas",
+            list(METRICS.keys()),
+            default=["Receita", "Resultado operacional", "Resultado líquido", "Ativos", "Capital próprio"],
+        )
         records = []
         for metric in selected:
             for item in annual_observations(payload, metric):
-                records.append({"Métrica": metric, "Período": item["periodo"], "Ano fiscal": item["ano_fiscal"], "Valor": item["valor"], "Unidade": item["unidade"], "Submetido": item["submetido"], "Tag": item["tag"]})
+                records.append({
+                    "Métrica": metric,
+                    "Período": item["periodo"],
+                    "Ano fiscal": item["ano_fiscal"],
+                    "Valor": item["valor"],
+                    "Unidade": item["unidade"],
+                    "Submetido": item["submetido"],
+                    "Accession": item["ficheiro"],
+                    "Tag": item["tag"],
+                })
         if records:
             frame = pd.DataFrame(records).sort_values(["Métrica", "Período"], ascending=[True, False])
-            frame["Valor (milhões USD)"] = frame.apply(lambda row: row["Valor"] / 1_000_000 if row["Unidade"] == "USD" else row["Valor"], axis=1)
-            st.dataframe(frame[["Métrica", "Período", "Ano fiscal", "Valor (milhões USD)", "Unidade", "Submetido", "Tag"]], use_container_width=True, hide_index=True)
-            st.download_button("Exportar tabela CSV", frame.to_csv(index=False).encode("utf-8-sig"), "apple_financial_history.csv", "text/csv")
+            frame["Valor (milhões USD)"] = frame.apply(
+                lambda row: row["Valor"] / 1_000_000 if row["Unidade"] == "USD" else row["Valor"],
+                axis=1,
+            )
+            st.dataframe(
+                frame[["Métrica", "Período", "Ano fiscal", "Valor (milhões USD)", "Unidade", "Submetido", "Accession", "Tag"]],
+                use_container_width=True,
+                hide_index=True,
+            )
+            st.download_button(
+                "Exportar tabela CSV",
+                frame.to_csv(index=False).encode("utf-8-sig"),
+                "apple_financial_history.csv",
+                "text/csv",
+            )
         else:
             st.warning("Não foram encontradas observações anuais para as métricas selecionadas. Não são fabricados valores em falta.")
 
@@ -85,9 +131,15 @@ else:
         if chart_rows:
             chart = pd.DataFrame(chart_rows)
             chart["valor_milhoes"] = chart["valor"] / 1_000_000 if chart_rows[0]["unidade"] == "USD" else chart["valor"]
-            fig = px.line(chart.sort_values("periodo"), x="periodo", y="valor_milhoes", markers=True, title=f"{metric} — milhões de {chart_rows[0]['unidade']}")
+            fig = px.line(
+                chart.sort_values("periodo"),
+                x="periodo",
+                y="valor_milhoes",
+                markers=True,
+                title=f"{metric} — milhões de {chart_rows[0]['unidade']}",
+            )
             st.plotly_chart(fig, use_container_width=True)
-            st.caption("A série usa observações anuais 10-K identificadas pela SEC. Confirme alterações de perímetro, classificação e reapresentações antes de comparar.")
+            st.caption("Série anual baseada em observações 10-K identificadas pela SEC. Confirme alterações de classificação e reapresentações antes de comparar.")
         else:
             st.info("Sem observações anuais compatíveis para esta métrica.")
 
@@ -97,13 +149,17 @@ else:
         if indicator_rows:
             indicator_frame = pd.DataFrame(indicator_rows)
             st.dataframe(indicator_frame, use_container_width=True, hide_index=True)
-            st.download_button("Exportar indicadores CSV", indicator_frame.to_csv(index=False).encode("utf-8-sig"), "apple_indicators.csv", "text/csv")
+            st.download_button(
+                "Exportar indicadores CSV",
+                indicator_frame.to_csv(index=False).encode("utf-8-sig"),
+                "apple_indicators.csv",
+                "text/csv",
+            )
         else:
             st.info("Não existem dados suficientes para calcular indicadores.")
 
     with tab_filings:
-        st.subheader("Calendário e histórico de filings SEC")
-        submissions = latest_submissions(DB_PATH)
+        st.subheader("Histórico de filings SEC")
         if submissions:
             filing_frame = pd.DataFrame(recent_filings(submissions))
             if not filing_frame.empty:
@@ -116,18 +172,28 @@ else:
                     "url": "URL oficial SEC",
                 })
                 st.dataframe(filing_frame, use_container_width=True, hide_index=True)
-                st.download_button("Exportar calendário SEC CSV", filing_frame.to_csv(index=False).encode("utf-8-sig"), "apple_sec_filings.csv", "text/csv")
+                st.download_button(
+                    "Exportar filings SEC CSV",
+                    filing_frame.to_csv(index=False).encode("utf-8-sig"),
+                    "apple_sec_filings.csv",
+                    "text/csv",
+                )
             else:
                 st.info("A SEC não devolveu filings 10-K, 10-Q ou 8-K no bloco recente.")
         else:
-            st.info("Atualize os dados oficiais para carregar também o calendário de filings SEC.")
-        st.caption("Este calendário contém datas efetivas de submissão à SEC. Não representa previsões de resultados nem datas futuras de earnings.")
+            st.info("Atualize os dados oficiais para carregar o histórico de filings SEC.")
+        st.caption("Este separador apresenta submissões efetivas à SEC. Não representa previsões nem datas futuras de resultados.")
 
     with tab_report:
         st.subheader("Relatório financeiro")
-        report_text = build_markdown_report(payload, latest_submissions(DB_PATH))
+        report_text = build_markdown_report(payload, submissions)
         st.markdown(report_text)
-        st.download_button("Descarregar relatório Markdown", report_text.encode("utf-8"), "apple_financial_report.md", "text/markdown")
+        st.download_button(
+            "Descarregar relatório Markdown",
+            report_text.encode("utf-8"),
+            "apple_financial_report.md",
+            "text/markdown",
+        )
 
     with tab_dictionary:
         st.subheader("Tags contabilísticas disponíveis")
@@ -137,9 +203,14 @@ else:
 
     st.divider()
     st.subheader("Proveniência e limitações")
-    st.write(f"Fonte original: {COMPANY_FACTS_URL}")
-    st.write("O JSON original da SEC é guardado sem alteração na base SQLite local, com data de recolha.")
-    st.warning("A normalização inicial usa apenas tags US-GAAP selecionadas e observações 10-K anuais. Pode haver diferenças de classificação, reapresentações ou métricas sem tag equivalente. Esta versão não é ainda uma análise de investimento validada.")
+    st.write(f"Fonte Company Facts: {COMPANY_FACTS_URL}")
+    st.write(f"Fonte Submissions: {SUBMISSIONS_URL}")
+    st.write("Os JSON originais da SEC são guardados sem alteração na base SQLite local, com data de recolha.")
+    st.warning(
+        "A normalização usa um conjunto limitado de tags US-GAAP e observações anuais 10-K. "
+        "Pode haver diferenças de classificação, extensões específicas e reapresentações. "
+        "Esta versão ainda não é uma análise de investimento validada."
+    )
 
 st.divider()
-st.caption("TESTE 1 · Acesso local em 127.0.0.1 · Sem envio dos dados locais para cloud.")
+st.caption("TESTE 1 · Acesso local em 127.0.0.1 · Os dados locais não são enviados para cloud.")
