@@ -13,11 +13,12 @@
 - [x] Extração inicial de observações anuais 10-K para nove métricas US-GAAP selecionadas.
 - [x] Interface com tabela histórica, gráficos, indicadores derivados, histórico de filings SEC, dicionário de tags e exportação CSV criada.
 - [x] Backup manual da base SQLite disponível na interface.
-- [x] Instalador Windows atualizado para tentar instalar Python 3.11 via winget quando não encontra Python; iniciador Streamlit configurado para abrir no browser.
+- [x] Instalador Windows atualizado para detetar Python 3.11+ e tentar instalar Python 3.11 via winget quando necessário; iniciador Streamlit configurado para abrir no browser.
+- [x] Workflow Windows atualizado para verificar sintaxe Python e executar testes unitários.
 - [x] Corrigida interface Streamlit: imports SEC em falta, separadores de filings/relatório e recolha de Submissions SEC.
 - [x] Treze testes unitários passaram num ambiente Python local isolado (cópia dos módulos e testes atuais); compilação Python também passou.
 - [x] GitHub Actions configurado para executar testes em Windows.
-- [ ] Workflow GitHub Actions confirmado como aprovado após as últimas alterações.
+- [ ] Workflow GitHub Actions confirmado como aprovado após as últimas alterações; a consulta de status não devolveu checks.
 - [ ] Reexecutar os testes após a correção da interface e do instalador.
 - [ ] Instalação e arranque verificados num PC Windows real; o instalador com winget ainda não foi executado num PC real.
 - [ ] Séries reconciliadas com os 10-K originais da Apple.
@@ -46,7 +47,7 @@
 | 2026-11-06 | Permissões no repositório teste1 | Leitura e escrita confirmadas |
 | 2026-11-06 | Testes unitários locais isolados | 13 aprovados; compilação Python também passou |
 | 2026-11-06 | GitHub Actions | Workflow configurado; GitHub não devolveu status para o commit consultado |
-| 2026-11-06 | Correção da interface e instalador | Commit 7cd72fb e commit 591b05e; execução real ainda pendente |\n| 2026-11-06 | Instalação Windows real | Pendente |
+| 2026-11-06 | Correção da interface e instalador | Commits 7cd72fb, 591b05e e d202eff; execução real ainda pendente |\n| 2026-11-06 | Workflow CI | Commit cdd62d6 adiciona compileall; status de execução ainda não confirmado |\n| 2026-11-06 | Instalação Windows real | Pendente |
 | 2026-11-06 | Reconciliação com 10-K Apple | Pendente |
 
 ## Próximas tarefas
