@@ -7,8 +7,9 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from financials import METRICS, annual_observations
-from sec_data import APPLE_CIK, COMPANY_FACTS_URL, fetch_sec_json, latest_company_facts, save_company_facts
+from app.financials import METRICS, annual_observations
+from app.indicators import build_indicators
+from app.sec_data import APPLE_CIK, COMPANY_FACTS_URL, fetch_sec_json, latest_company_facts, save_company_facts
 
 ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = ROOT / "data" / "teste1.sqlite3"
@@ -50,7 +51,7 @@ else:
     c2.metric("Tags US-GAAP", f"{len(tags):,}")
     c3.metric("CIK", APPLE_CIK)
 
-    tab_table, tab_chart, tab_dictionary = st.tabs(["Lista financeira", "Gráficos", "Dicionário de dados"])
+    tab_table, tab_chart, tab_indicators, tab_dictionary = st.tabs(["Lista financeira", "Gráficos", "Indicadores", "Dicionário de dados"])
 
     with tab_table:
         st.subheader("Histórico anual — demonstrações selecionadas")
@@ -79,6 +80,16 @@ else:
             st.caption("A série usa observações anuais 10-K identificadas pela SEC. Confirme alterações de perímetro, classificação e reapresentações antes de comparar.")
         else:
             st.info("Sem observações anuais compatíveis para esta métrica.")
+
+    with tab_indicators:
+        st.subheader("Indicadores derivados")
+        indicator_rows = build_indicators(payload)
+        if indicator_rows:
+            indicator_frame = pd.DataFrame(indicator_rows)
+            st.dataframe(indicator_frame, use_container_width=True, hide_index=True)
+            st.download_button("Exportar indicadores CSV", indicator_frame.to_csv(index=False).encode("utf-8-sig"), "apple_indicators.csv", "text/csv")
+        else:
+            st.info("Não existem dados suficientes para calcular indicadores.")
 
     with tab_dictionary:
         st.subheader("Tags contabilísticas disponíveis")
