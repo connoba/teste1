@@ -100,6 +100,28 @@ else:
         else:
             st.info("Não existem dados suficientes para calcular indicadores.")
 
+    with tab_filings:
+        st.subheader("Calendário e histórico de filings SEC")
+        submissions = latest_submissions(DB_PATH)
+        if submissions:
+            filing_frame = pd.DataFrame(recent_filings(submissions))
+            if not filing_frame.empty:
+                filing_frame = filing_frame.rename(columns={
+                    "form": "Formulário",
+                    "filingDate": "Data de submissão",
+                    "reportDate": "Período reportado",
+                    "accessionNumber": "Accession",
+                    "primaryDocument": "Documento",
+                    "url": "URL oficial SEC",
+                })
+                st.dataframe(filing_frame, use_container_width=True, hide_index=True)
+                st.download_button("Exportar calendário SEC CSV", filing_frame.to_csv(index=False).encode("utf-8-sig"), "apple_sec_filings.csv", "text/csv")
+            else:
+                st.info("A SEC não devolveu filings 10-K, 10-Q ou 8-K no bloco recente.")
+        else:
+            st.info("Atualize os dados oficiais para carregar também o calendário de filings SEC.")
+        st.caption("Este calendário contém datas efetivas de submissão à SEC. Não representa previsões de resultados nem datas futuras de earnings.")
+
     with tab_dictionary:
         st.subheader("Tags contabilísticas disponíveis")
         query = st.text_input("Pesquisar tag US-GAAP", placeholder="Ex.: Revenue, Assets, NetIncome")
