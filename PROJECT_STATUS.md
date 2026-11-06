@@ -14,7 +14,7 @@
 - [x] Interface com tabela histórica, gráficos, indicadores derivados, histórico de filings SEC, dicionário de tags e exportação CSV criada.
 - [x] Backup manual da base SQLite disponível na interface.
 - [x] Instalador Windows com verificação Python 3.11+ e iniciador com browser automático configurado.
-- [x] Doze testes unitários passaram num ambiente Python local isolado (cópia dos módulos e testes atuais); compilação Python também passou.
+- [x] Treze testes unitários passaram num ambiente Python local isolado (cópia dos módulos e testes atuais); compilação Python também passou.
 - [x] GitHub Actions configurado para executar testes em Windows.
 - [ ] Workflow GitHub Actions confirmado como aprovado.
 - [ ] Instalação e arranque verificados num PC Windows real.
@@ -32,9 +32,9 @@
 | 3 — Dados oficiais | Protótipo | Company Facts e Submissions SEC preservados; séries anuais e filings extraídos; reconciliação pendente |
 | 4 — Interface | Protótipo | Lista, gráficos, indicadores, calendário de filings, dicionário e CSV implementados |
 | 5 — Análise | Protótipo | Crescimento da receita, margens, FCF aproximado, passivos/capital próprio e ROE aproximado implementados; validação financeira pendente |
-| 6 — Relatórios | Por iniciar | Relatório financeiro autónomo por implementar |
+| 6 — Relatórios | Protótipo | Relatório Markdown descarregável com séries, indicadores, filings e fontes; validação documental pendente |
 | 7 — Calendário | Protótipo | Histórico SEC 10-K, 10-Q e 8-K; calendário futuro de earnings por implementar |
-| 8 — Testes | Parcialmente testado | 12 testes locais passaram; CI e Windows real pendentes |
+| 8 — Testes | Parcialmente testado | 13 testes locais passaram; CI e Windows real pendentes |
 | 9 — Entrega | Por iniciar | Sem versão estável |
 
 ## Registo de verificações
@@ -42,7 +42,7 @@
 |---|---|---|
 | 2026-11-06 | Acesso GitHub à conta connoba | Aprovado |
 | 2026-11-06 | Permissões no repositório teste1 | Leitura e escrita confirmadas |
-| 2026-11-06 | Testes unitários locais isolados | 12 aprovados; compilação Python também passou |
+| 2026-11-06 | Testes unitários locais isolados | 13 aprovados; compilação Python também passou |
 | 2026-11-06 | GitHub Actions | Workflow configurado; GitHub não devolveu status para o commit consultado |
 | 2026-11-06 | Instalação Windows real | Pendente |
 | 2026-11-06 | Reconciliação com 10-K Apple | Pendente |
