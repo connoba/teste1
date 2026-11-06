@@ -31,3 +31,26 @@ def test_missing_inputs_do_not_create_fabricated_ratios():
         {"form": "10-K", "fy": 2024, "end": "2024-09-28", "val": 10}
     ]}}}}}
     assert build_indicators(payload) == [{"Período": "2024-09-28"}]
+
+
+def test_annual_growth_and_roe_are_not_calculated_across_missing_years():
+    revenue = {"units": {"USD": [
+        {"form": "10-K", "fy": 2021, "start": "2020-10-01", "end": "2021-09-30", "val": 100},
+        {"form": "10-K", "fy": 2024, "start": "2023-10-01", "end": "2024-09-28", "val": 160},
+    ]}}
+    net_income = {"units": {"USD": [
+        {"form": "10-K", "fy": 2021, "start": "2020-10-01", "end": "2021-09-30", "val": 10},
+        {"form": "10-K", "fy": 2024, "start": "2023-10-01", "end": "2024-09-28", "val": 20},
+    ]}}
+    equity = {"units": {"USD": [
+        {"form": "10-K", "fy": 2021, "end": "2021-09-30", "val": 100},
+        {"form": "10-K", "fy": 2024, "end": "2024-09-28", "val": 150},
+    ]}}
+    payload = {"facts": {"us-gaap": {
+        "RevenueFromContractWithCustomerExcludingAssessedTax": revenue,
+        "NetIncomeLoss": net_income,
+        "StockholdersEquity": equity,
+    }}}
+    rows = build_indicators(payload)
+    assert "Crescimento da receita (%)" not in rows[-1]
+    assert "ROE aproximado (%)" not in rows[-1]
