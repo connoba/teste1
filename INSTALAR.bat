@@ -9,8 +9,15 @@ echo.
 
 where py >nul 2>nul
 if errorlevel 1 (
-  echo ERRO: Python 3 nao foi encontrado.
-  echo Instale Python 3.11 ou superior e ative "Add Python to PATH".
+  echo ERRO: Python 3.11 ou superior nao foi encontrado.
+  echo Instale Python 3.11+ e ative "Add Python to PATH".
+  pause
+  exit /b 1
+)
+
+py -3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3,11) else 1)"
+if errorlevel 1 (
+  echo ERRO: E necessario Python 3.11 ou superior.
   pause
   exit /b 1
 )
