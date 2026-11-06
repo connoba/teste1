@@ -13,7 +13,7 @@
 - [x] Extração inicial de observações anuais 10-K para nove métricas US-GAAP selecionadas.
 - [x] Interface com tabela histórica, gráficos, dicionário de tags e exportação CSV.
 - [x] Instalador Windows com verificação Python 3.11+ e iniciador com browser automático configurado.
-- [x] Seis testes unitários executados com sucesso num ambiente Python local isolado (cópia dos módulos e testes atuais).
+- [x] Oito testes unitários executados com sucesso num ambiente Python local isolado (cópia dos módulos e testes atuais).
 - [x] GitHub Actions configurado para executar testes em Windows.
 - [ ] Workflow GitHub Actions confirmado como aprovado.
 - [ ] Instalação e arranque verificados num PC Windows real.
@@ -29,10 +29,10 @@
 | 2 — Fundação local | Em curso | SQLite e scripts .bat criados; instalação, arranque e recuperação por testar |
 | 3 — Dados oficiais | Protótipo | SEC Company Facts preservado; séries anuais iniciais extraídas; reconciliação pendente |
 | 4 — Interface | Protótipo | Lista, gráficos, dicionário de tags e CSV implementados |
-| 5 — Análise | Por iniciar | Rácios e diagnósticos por implementar |
+| 5 — Análise | Protótipo | Crescimento da receita, margens, FCF, passivos/capital próprio e ROE aproximado implementados; validação financeira pendente |
 | 6 — Relatórios | Por iniciar | Por implementar |
 | 7 — Calendário | Por iniciar | Por implementar |
-| 8 — Testes | Parcialmente testado | 6 testes locais passaram; CI e Windows real pendentes |
+| 8 — Testes | Parcialmente testado | 8 testes locais passaram; CI e Windows real pendentes |
 | 9 — Entrega | Por iniciar | Sem versão estável |
 
 ## Registo de verificações
@@ -40,7 +40,7 @@
 |---|---|---|
 | 2026-11-06 | Acesso GitHub à conta connoba | Aprovado |
 | 2026-11-06 | Permissões no repositório teste1 | Leitura e escrita confirmadas |
-| 2026-11-06 | Testes unitários locais isolados | 6 aprovados |
+| 2026-11-06 | Testes unitários locais isolados | 8 aprovados |
 | 2026-11-06 | Workflow GitHub Actions | Configurado; resultado ainda não confirmado |
 | 2026-11-06 | Instalação Windows real | Pendente |
 | 2026-11-06 | Reconciliação com 10-K Apple | Pendente |
