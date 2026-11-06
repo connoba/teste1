@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from financials import annual_observations
+from app.financials import annual_observations
 
 
 def build_indicators(payload: dict[str, Any]) -> list[dict[str, Any]]:
