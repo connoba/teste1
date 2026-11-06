@@ -6,44 +6,51 @@
 
 ## Resumo honesto
 - [x] Acesso GitHub à conta connoba e permissões de escrita confirmados.
-- [x] Documentação inicial, arquitetura candidata, fontes, validação, segurança, plano de testes e roadmap criados.
-- [x] Protótipo inicial da aplicação Streamlit criado.
-- [x] Integração inicial com SEC Company Facts para Apple implementada.
-- [x] Persistência do payload original em SQLite local implementada.
-- [x] Scripts Windows de instalação e arranque criados.
-- [x] Testes unitários iniciais criados.
-- [x] GitHub Actions configurado para executar os testes em Windows.
-- [ ] Testes automáticos executados e aprovados.
+- [x] Documentação inicial, arquitetura, fontes, validação, segurança, testes e roadmap criados.
+- [x] Aplicação local Streamlit criada.
+- [x] Recolha de SEC Company Facts para Apple implementada.
+- [x] Payload original guardado em SQLite, com URL e data de recolha.
+- [x] Extração inicial de observações anuais 10-K para nove métricas/tag US-GAAP selecionadas.
+- [x] Separação de factos de duração e instantâneos; filtragem de unidade e duração anual.
+- [x] Interface com tabela, gráfico e exportação CSV criada.
+- [x] Instalador e iniciador Windows criados.
+- [x] Seis testes unitários executados com sucesso num ambiente Python local isolado (cópia dos módulos e testes atuais).
+- [x] Workflow GitHub Actions configurado para Windows.
+- [ ] Workflow GitHub Actions confirmado como aprovado.
 - [ ] Instalação e arranque verificados num PC Windows real.
-- [ ] Dados SEC reconciliados com documentos oficiais e métricas normalizadas.
+- [ ] Séries reconciliadas com os 10-K originais da Apple.
+- [ ] Backup e restauro testados.
+- [ ] Relatórios, calendário e análise fundamentalista concluídos.
 
 ## Estado por fase
 | Fase | Estado | Evidência |
 |---|---|---|
-| 0 — Auditoria e âmbito | Concluída | Repositório e requisitos iniciais auditados; documentação criada |
-| 1 — Tecnologia | Em validação | Protótipo Python/Streamlit/SQLite criado; aguarda execução de CI e teste Windows |
-| 2 — Fundação local | Em curso | SQLite e scripts .bat criados; instalação, arranque, backup e restauro por testar |
-| 3 — Dados oficiais | Protótipo | Recolha Company Facts SEC e preservação do JSON implementadas; validação contabilística por fazer |
-| 4 — Interface | Protótipo | Página local de exploração de tags US-GAAP criada; modos Lista/Gráficos finais por fazer |
-| 5 — Análise | Por iniciar | Métricas financeiras ainda não calculadas |
+| 0 — Auditoria e âmbito | Concluída | Requisitos e riscos documentados |
+| 1 — Tecnologia | Em validação | Protótipo criado; execução Windows e CI pendentes |
+| 2 — Fundação local | Em curso | SQLite e scripts .bat criados; instalação, arranque e recuperação por testar |
+| 3 — Dados oficiais | Protótipo | SEC Company Facts preservado; séries anuais iniciais extraídas; reconciliação oficial pendente |
+| 4 — Interface | Protótipo | Lista, gráficos, dicionário de tags e CSV implementados |
+| 5 — Análise | Por iniciar | Rácios e diagnósticos ainda não implementados |
 | 6 — Relatórios | Por iniciar | Por implementar |
 | 7 — Calendário | Por iniciar | Por implementar |
-| 8 — Testes | Preparado, execução pendente | Testes pytest e workflow Windows criados; sem resultado de execução confirmado |
+| 8 — Testes | Parcialmente testado | 6 testes locais passaram; CI e Windows real pendentes |
 | 9 — Entrega | Por iniciar | Sem versão estável |
 
-## Verificações registadas
+## Registo de verificações
 | Data | Verificação | Resultado |
 |---|---|---|
 | 2026-11-06 | Acesso GitHub à conta connoba | Aprovado |
 | 2026-11-06 | Permissões no repositório teste1 | Leitura e escrita confirmadas |
-| 2026-11-06 | Documentação e ficheiros de aplicação | Criados no branch main |
-| 2026-11-06 | Testes automáticos | Ainda não executados/confirmados |
+| 2026-11-06 | Testes unitários locais isolados | 6 aprovados |
+| 2026-11-06 | GitHub Actions | Workflow configurado; resultado não confirmado |
+| 2026-11-06 | Instalação Windows real | Pendente |
+| 2026-11-06 | Reconciliação com 10-K Apple | Pendente |
 
-## Próximos passos
-1. Obter o resultado do workflow GitHub Actions em Windows.
-2. Corrigir todos os erros reportados pelo CI.
-3. Executar instalação e arranque no Windows.
-4. Validar o payload SEC e construir a primeira tabela financeira com períodos e unidades corretos.
-5. Só depois avançar para gráficos e métricas.
+## Próximas tarefas
+1. Obter resultado de CI e corrigir falhas.
+2. Testar os BATs num Windows limpo.
+3. Verificar as tags e os valores SEC contra os 10-K Apple.
+4. Adicionar versões de filings e dados de submissions.
+5. Criar backups/restauro e validar modo offline.
 
-**Regra de controlo:** código criado não significa código testado; testes preparados não significam testes aprovados. Não promover fases sem evidência.
+**Regra de controlo:** código criado não significa código testado; testes locais não significam CI aprovado; valores extraídos não significam validação contabilística.
